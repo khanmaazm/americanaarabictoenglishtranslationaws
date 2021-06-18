@@ -1,0 +1,260 @@
+orapki wallet create -wallet "C:\oracle\product\18.0.0\admin\XE\wallet" -pwd woAbs81x10Zym -auto_login
+orapki wallet add -wallet "C:\oracle\product\18.0.0\admin\XE\wallet" -trusted_cert -cert "C:\oracle\product\18.0.0\admin\XE\wallet\awslambdaa2.cer" -pwd woAbs81x10Zym
+orapki wallet remove -wallet "C:\awscerts\wallet" -trusted_cert_all -pwd "woAbs81x10Zym"
+orapki wallet display -wallet "C:\awscerts\wallet" -pwd "woAbs81x10Zym"
+
+
+
+EXEC UTL_HTTP.set_wallet('file:/u01/app/oracle/admin/DB11G/wallet', 'WalletPasswd123');
+EXEC show_html_from_url('https://gb.redhat.com/');
+
+begin
+dbms_output.put_line('Err: None');
+
+
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => 'k0rtmd4ue2.execute-api.us-east-1.amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+dbms_output.put_line('Err: None');
+
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => '*.execute-api.us-east-1.amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+dbms_output.put_line('Err: None');
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => 'execute-api.us-east-1.amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+dbms_output.put_line('Err: None');
+
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => '*', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+dbms_output.put_line('Err: None');
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => '*.amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+dbms_output.put_line('Err: None');
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => 'amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+ DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+  host    => '*.execute-api.us-east-1.amazonaws.com', --*, amazonaws.com
+  lower_port => 8443,
+  upper_port => 8443,
+  ace    => xs$ace_type(
+           privilege_list => xs$name_list('http,connect,resolve,http_proxy'),
+           granted     => true, -- xs$name_list('connect,resolve')
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+
+dbms_output.put_line('Err: None');
+ DBMS_NETWORK_ACL_ADMIN.APPEND_WALLET_ACE(
+  wallet_path => 'file:C:\awscerts',
+  ace     => xs$ace_type(
+           privilege_list => xs$name_list('use_client_certificates', 'use_passwords'),
+           principal_name => 'PUBLIC',
+           principal_type => xs_acl.ptype_db
+          )
+ );
+ commit;
+
+ exception
+  when others then
+    dbms_output.put_line('Err: ' || SQLERRM);
+end;
+/
+
+woAbs81x10Zym
+
+
+https://k0rtmd4ue2.execute-api.us-east-1.amazonaws.com/default/americanatranslatetext?sourcelang=ar&targetlang=en&text=%D8%A8%D8%A7%D9%84%D9%88%D9%86%20%D9%84%D9%8A%D8%AF%D9%89
+
+
+
+
+Create Or Replace Procedure xxitemconverttoenglish2
+Is
+
+Cursor lcur_item 
+Is select name from vendors where vendor_id = 40145;
+
+v_url    VARCHAR2(1000) := 'https://k0rtmd4ue2.execute-api.us-east-1.amazonaws.com/default/americanatranslatetext?sourcelang=ar' || chr(38) || 'targetlang=en' || chr(38) || 'text=';
+req_context         UTL_HTTP.REQUEST_CONTEXT_KEY;
+v_req               utl_http.req;
+
+v_resp              utl_http.resp;
+
+Begin
+
+For lv_rec In lcur_item
+Loop
+
+dbms_output.put_line ('see ' || lv_rec.name);
+v_url := v_url || lv_rec.name;
+dbms_output.put_line ('see ' || v_url);
+
+begin
+    req_context := UTL_HTTP.CREATE_REQUEST_CONTEXT (wallet_path => 'file:C:\oracle\product\18.0.0\admin\XE\wallet',wallet_password => 'woAbs81x10Zym');
+    v_req := utl_http.begin_request(url => v_url, method => 'GET',request_context => req_context);
+    v_resp := utl_http.get_response(r => v_req);
+    dbms_output.put_line('HTTP Status Return code: ' || v_resp.status_code);
+    dbms_output.put_line('Err  : ' || utl_http.get_detailed_sqlerrm);
+
+exception
+when others then
+ dbms_output.put_line('Err  : ' || utl_http.get_detailed_sqlerrm);
+end ;
+
+Insert into xxarab_text_convert (id, arabicname, englishname, fromlang, tolang, urlcalled)
+values (1, lv_rec.name, lv_rec.name, 'ar', 'en', v_url);
+
+End Loop ;
+
+End ;
+/
+
+
+
+
+
+begin
+  sys.dbms_network_acl_admin.append_host_ace(
+    host        => 'amazonaws.com'
+   ,lower_port  => 443
+   ,upper_port  => 443
+   ,ace         => xs$ace_type(
+      privilege_list     => xs$name_list('http_proxy')
+     ,granted            => true
+     ,principal_name     => 'PUBLIC'
+     ,principal_type     => XS_ACL.PTYPE_DB
+    )
+  );
+end;
+/
+
+
+begin
+  sys.dbms_network_acl_admin.append_host_ace(
+    host        => '*.amazonaws.com'
+   ,lower_port  => 443
+   ,upper_port  => 443
+   ,ace         => xs$ace_type(
+      privilege_list     => xs$name_list('http_proxy')
+     ,granted            => true
+     ,principal_name     => 'PUBLIC'
+     ,principal_type     => XS_ACL.PTYPE_DB
+    )
+  );
+end;
+/
+
+
+begin
+  sys.dbms_network_acl_admin.append_host_ace(
+    host        => '*'
+   ,lower_port  => 443
+   ,upper_port  => 443
+   ,ace         => xs$ace_type(
+      privilege_list     => xs$name_list('http_proxy')
+     ,granted            => true
+     ,principal_name     => 'PUBLIC'
+     ,principal_type     => XS_ACL.PTYPE_DB
+    )
+  );
+end;
+/
+
+exec dbms_network_acl_admin.drop_acl (acl => 'awscall.xml');
+
+
+exec dbms_network_acl_admin.create_acl (acl => 'awscall.xml', description => 'mytest acl', principal => 'C##AMDATACLEANSE', is_grant => true, privilege => 'connect', start_date => systimestamp, end_date => null);
+
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall.xml', principal => 'C##AMDATACLEANSE', is_grant => TRUE, privilege => 'resolve');
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall.xml', host => 'k0rtmd4ue2.execute-api.us-east-1.amazonaws.com', lower_port => Null, upper_port => Null);
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall.xml', host => '*.amazonaws.com', lower_port => Null, upper_port => Null);
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall.xml', host => '*', lower_port => Null, upper_port => Null);
+
+
+
+
+
+exec dbms_network_acl_admin.drop_acl (acl => 'awscall2.xml');
+
+exec dbms_network_acl_admin.create_acl (acl => 'awscall2.xml', description => 'mytest acl', principal => 'PUBLIC', is_grant => true, privilege => 'connect', start_date => systimestamp, end_date => null);
+
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'PUBLIC', is_grant => TRUE, privilege => 'connect');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'PUBLIC', is_grant => TRUE, privilege => 'resolve');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'PUBLIC', is_grant => TRUE, privilege => 'use-client-certificates');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'PUBLIC', is_grant => TRUE, privilege => 'use-passwords');
+exec DBMS_NETWORK_ACL_ADMIN.ASSIGN_WALLET_ACL('awscall2.xml','file:C:\awscerts');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'C##AMDATACLEANSE', is_grant => TRUE, privilege => 'connect');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'C##AMDATACLEANSE', is_grant => TRUE, privilege => 'resolve');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'C##AMDATACLEANSE', is_grant => TRUE, privilege => 'use-client-certificates');
+exec DBMS_NETWORK_ACL_ADMIN.add_privilege (acl => 'awscall2.xml', principal => 'C##AMDATACLEANSE', is_grant => TRUE, privilege => 'use-passwords');
+exec DBMS_NETWORK_ACL_ADMIN.ASSIGN_WALLET_ACL('awscall2.xml','file:C:\awscerts');
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall2.xml', host => 'k0rtmd4ue2.execute-api.us-east-1.amazonaws.com', lower_port => Null, upper_port => Null);
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall2.xml', host => '*.amazonaws.com', lower_port => Null, upper_port => Null);
+
+exec dbms_network_acl_admin.assign_acl(acl => 'awscall2.xml', host => '*', lower_port => Null, upper_port => Null);
+
+
